@@ -4,10 +4,6 @@ let { version } = require('../package');
 const toArray = val => (Array.isArray(val) ? val : val == null ? [] : [val]);
 
 export default handler => {
-	const ENABLE_MODERN = process.env.MICROBUNDLE_MODERN !== 'false';
-
-	const DEFAULT_FORMATS = ENABLE_MODERN ? 'modern,es,cjs,umd' : 'es,cjs,umd';
-
 	const cmd = type => (str, opts) => {
 		opts.watch = opts.watch || type === 'watch';
 		opts.compress =
@@ -22,16 +18,12 @@ export default handler => {
 		.version(version)
 		.option('--entry, -i', 'Entry module(s)')
 		.option('--output, -o', 'Directory to place build files into')
-		.option('--format, -f', 'Only build specified formats', DEFAULT_FORMATS)
+		.option('--format, -f', 'Only build specified formats', 'es,cjs,umd')
 		.option('--watch, -w', 'Rebuilds on any change', false)
-		.option('--target', 'Specify your target environment (node or web)', 'web')
+		.option('--target', 'Specify your target environment', 'web')
 		.option('--external', `Specify external dependencies, or 'none'`)
 		.option('--globals', `Specify globals dependencies, or 'none'`)
 		.example('microbundle --globals react=React,jquery=$')
-		.option('--define', 'Replace constants with hard-coded values')
-		.example('microbundle --define API_KEY=1234')
-		.option('--alias', `Map imports to different modules`)
-		.example('microbundle --alias react=preact')
 		.option('--compress', 'Compress output using Terser', null)
 		.option('--strict', 'Enforce undefined global context and add "use strict"')
 		.option('--name', 'Specify name exposed in UMD builds')
